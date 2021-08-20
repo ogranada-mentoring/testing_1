@@ -1,8 +1,15 @@
-const { suma, modulo } = require("./matematica");
+const express = require("express")
+const { makeRouter } = require("./router1");
+
 
 function main() {
-    console.log(suma(2, 2));
-    console.log(modulo(20, 3));
+    const server = express()
+    const PORT = 5000
+    server.use(makeRouter())
+
+    server.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`)
+    })
 }
 
 main();

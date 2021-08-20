@@ -1,14 +1,17 @@
 const express = require('express');
+const fetch = require("node-fetch")
+const { cache } = require("./cache")
 
-
-function makeRouter(server) {
+function makeRouter() {
   const router = express.Router();
 
-  router.get('/', (req, res) => {
-    res.send('OK');
+  router.get('/:ciudad', cache, async (req, res) => {
+    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${req.params.ciudad}&appid=217381ead8580dfce5b954b94162893f`)
+    const cityData = await response.json()
+    req.cache(cityData)
+    res.json(cityData)
   })
 
-  server.use(router);
   return router;
 }
 
@@ -19,6 +22,8 @@ function cargarInfoDeBD() {
     }, 1000);
   })
 }
+
+
 
 module.exports = {
   makeRouter,
